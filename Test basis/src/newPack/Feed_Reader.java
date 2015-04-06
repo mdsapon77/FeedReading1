@@ -24,8 +24,9 @@ public class Feed_Reader {
 	
 	
 
-	public void getShowTitles(String showUrl) throws MalformedURLException, SAXException, IOException, ParserConfigurationException {
-	
+	public String[] getShowTitles(String showUrl) throws MalformedURLException, SAXException, IOException, ParserConfigurationException {
+		
+
 		dbf = DocumentBuilderFactory.newInstance();
 		 db = dbf.newDocumentBuilder();
 		 doc = db.parse(new URL(showUrl).openStream());
@@ -34,7 +35,8 @@ public class Feed_Reader {
 	 
 		NodeList nList = doc.getElementsByTagName("item");
 	 
-		int index=0; 
+		//int index=0;
+		String[]titles=new String[nList.getLength()];
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 			
 			
@@ -50,20 +52,20 @@ public class Feed_Reader {
 				
 				try{
 					//System.out.println("Episode title is  : " + eElement.getElementsByTagName("title").item(0).getTextContent());
-					System.out.println("Show title is  : " + eElement.getElementsByTagName("title").item(0).getTextContent());
+					titles[temp]=eElement.getElementsByTagName("title").item(0).getTextContent();
 				
 				
 				}catch(Exception e){
 					
 				}
-				index++;
+				//index++;
 				
 	 
 			}
 		
 			
 		}
-		System.out.println("total items present : "+index);
+		return titles;
 	    }
 	
 	public void getEpisodeTitles(String episodesUrl) throws MalformedURLException, SAXException, IOException, ParserConfigurationException {
@@ -359,5 +361,25 @@ public class Feed_Reader {
 			}
 			System.out.println("total items present : "+index);
 		    }
+		
+		public static boolean validateTitle(String[] arr1, String[] arr2)
+		{
+		    if (arr1.length == arr2.length)
+		    {
+		         for (int i = 0; i < arr1.length; i++)
+		          {
+		             if ((arr1[i] != null && arr2[i] != null && !arr1[i].equals(arr2[i]))
+		                 || (arr1[i] != null && arr2[i] == null) || 
+		                 (arr2[i] != null && arr1[i] == null))
+		              {
+		                return false;
+		              }
+		          }
+		    } else {
+		         return false;  
+		    }
+		    return true;  
+		 }
+		
 		
 }
